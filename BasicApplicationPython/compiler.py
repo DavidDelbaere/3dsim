@@ -11,6 +11,3 @@ def compile(filename):
                 z = coordinates[3]
                 
                 print("x: "  + x+" y: " + y + " z: " + z)
-                
-def drawPoint(x,y):
-     return 0
