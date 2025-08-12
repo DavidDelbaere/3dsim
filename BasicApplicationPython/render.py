@@ -1,7 +1,16 @@
 
 import instance
-camera = instance.instance(0,0,0)
+import math
+camera = instance.instance(0,0.75,-1)
 points = []
+scale = 1000
+import turtle
+from turtle import *
+
+screen = turtle.Screen()
+my_turtle = turtle.Turtle()
+my_turtle.penup()
+
 def initRender(filename):
         
         lines = open(filename)
@@ -10,14 +19,44 @@ def initRender(filename):
         for line in lines:
             coordinates = line.split()
             if coordinates[0] == "v":
-                x = coordinates[1]
-                y = coordinates[2]
-                z = coordinates[3]
+                x = float(coordinates[1]) + camera.getX()
+                y = float(coordinates[2])+ camera.getY()
+                z = float(coordinates[3])
+                screen_x, screen_y = calculateScreenCoord(x,y,z)
+                point = instance.instance(x,y,z)
 
-                points.append(instance.instance(x,y,z))
+                points.append(point)
+                if screen_x != "NaN":
+                    screen_x*=scale
+                    screen_y*=scale
+
+
+                    point.setScreenCoords(screen_x,screen_y)
+                    my_turtle.hideturtle()
+                    my_turtle.goto(screen_x, screen_y)
+                    my_turtle.dot(10,"blue")
+            if coordinates[0] == "l":
+                pointOne = int(coordinates[1])
+                pointTwo = int(coordinates[2])
                 
+                my_turtle.penup()
+                my_turtle.teleport(points[pointOne].getScreenX(),points[pointOne].getScreenY()) 
+                my_turtle.pendown()
+                
+                my_turtle.goto(points[pointTwo].getScreenX(),points[pointTwo].getScreenY())
+                
+def calculateScreenCoord(x,y,z):
 
 
 
-def calculatePlane():
-    angles = camera.getAngle()
+    aspect = 20
+    
+    fov = 60
+    z = camera.getZ() - float(z)
+    if (z == 0):
+         return "NaN","NaN"
+    x *= ((1 / (aspect*math.tan(math.radians(fov/2))))/z) 
+    y *= ((1/math.tan(fov/2))/z)
+    print(y)
+    return x,y
+    
