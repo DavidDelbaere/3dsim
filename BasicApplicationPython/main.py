@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
-import compiler
+import render as rd
 from turtle import *
 
 # new window
@@ -33,8 +33,7 @@ def open_file():
         
         print(f"Selected file: {filename}")
         
-        compiler.compile(filename)
+        rd.initRender(filename)
 
 
-# Main
-root = newWindow()
+newWindow()
