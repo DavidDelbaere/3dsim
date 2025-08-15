@@ -1,7 +1,7 @@
 
 import instance
 import math
-camera = instance.instance(0,0.75,-1)
+camera = instance.instance(0.5,0.75,-1)
 points = []
 scale = 1000
 import turtle
@@ -20,7 +20,7 @@ def initRender(filename):
             coordinates = line.split()
             if coordinates[0] == "v":
                 x = float(coordinates[1]) + camera.getX()
-                y = float(coordinates[2])+ camera.getY()
+                y = float(coordinates[2]) -  camera.getY()
                 z = float(coordinates[3])
                 screen_x, screen_y = calculateScreenCoord(x,y,z)
                 point = instance.instance(x,y,z)
@@ -47,16 +47,17 @@ def initRender(filename):
                 
 def calculateScreenCoord(x,y,z):
 
-
-
+    nearplane = camera.getZ()  + 0.1
+    farplane = nearplane + 10
+    w = 1
     aspect = 20
     
     fov = 60
-    z = camera.getZ() - float(z)
+    z -= nearplane
     if (z == 0):
          return "NaN","NaN"
-    x *= ((1 / (aspect*math.tan(math.radians(fov/2))))/z) 
-    y *= ((1/math.tan(fov/2))/z)
+    x *= (nearplane * ((1 / (aspect*math.tan(math.radians(fov/2)))))) / z 
+    y *= (nearplane * ((1/math.tan(fov/2))))/z
     print(y)
     return x,y
     
